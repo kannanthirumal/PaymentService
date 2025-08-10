@@ -14,12 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class PaymentController {
     private PaymentService paymentService;
 
-    public PaymentController(@Qualifier("razorpayPaymentGateway") PaymentService paymentService) {
+    public PaymentController(@Qualifier("stripePaymentGateway") PaymentService paymentService) {
         this.paymentService = paymentService;
     }
 
     @PostMapping()
-    public String generatePaymentLink(@RequestBody GeneratePaymentLinkRequestDto generatePaymentLinkRequestDto) throws RazorpayException {
+    public String generatePaymentLink(@RequestBody GeneratePaymentLinkRequestDto generatePaymentLinkRequestDto) throws Exception {
         return paymentService.generatePaymentLink(generatePaymentLinkRequestDto.getOrderId());
+    }
+
+    @PostMapping("/webhook")
+    public void handleWebHook(@RequestBody Object webHook) {
+        //the logic for webhook implementation goes here
+        //Object -> temporarily marking it as object. will create a proper DTO at the time of implementation
     }
 }
